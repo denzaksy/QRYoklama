@@ -1,0 +1,63 @@
+@{
+    Layout = null; // Şimdilik sade bir tasarım olsun
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoca Yönetim Paneli</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f6f9; }
+        .navbar { background-color: #343a40; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #ffc107; text-decoration: none; font-weight: bold; }
+        .container { padding: 30px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-qr { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; inline-block: true; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h2>QR Yoklama Sistemi - Hoca Paneli</h2>
+    <!-- Çıkış yapma butonu -->
+    <!-- Güvenlik standartları gereği Logout işlemi POST olarak tetiklenmelidir -->
+<form action="/Account/Logout" method="post" style="display: inline;">
+    <!-- CSRF saldırılarını engellemek için güvenlik tokenını gömüyoruz -->
+    @Html.AntiForgeryToken()
+    
+    <button type="submit" class="btn-logout">
+        <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+    </button>
+</form>
+
+<style>
+    .btn-logout {
+        background-color: #dc3545; /* Kurumsal kırmızı renk */
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+    .btn-logout:hover {
+        background-color: #c82333;
+    }
+</style>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h3>Hoş Geldiniz, Hocam!</h3>
+        <p>Sisteme başarıyla giriş yaptınız. QR kod tabanlı yoklama sisteminin web yönetim paneli burası olacak.</p>
+        <hr>
+        <p>Bundan sonraki adımda buraya <strong>"QR Kod Oluştur"</strong> butonu ve eski yoklama listelerini görebileceğiniz tablolar ekleyeceğiz.</p>
+        <br>
+        <a href="#" class="btn-qr">Yeni QR Kod Üret (Yakında)</a>
+    </div>
+</div>
+
+</body>
+</html>
