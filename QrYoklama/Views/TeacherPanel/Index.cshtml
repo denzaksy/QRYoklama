@@ -1,63 +1,142 @@
+@model List<string>
+
 @{
-    Layout = null; // Şimdilik sade bir tasarım olsun
+    ViewData["Title"] = "Hoca Yoklama Paneli";
+    // Controller'dan ViewBag ile gelen listeleri C# listesine geri çeviriyoruz
+    var derslikler = ViewBag.Derslikler as List<string>;
+    var dersSaatleri = ViewBag.DersSaatleri as List<string>;
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Hoca Yönetim Paneli</title>
-    <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f6f9; }
-        .navbar { background-color: #343a40; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .navbar a { color: #ffc107; text-decoration: none; font-weight: bold; }
-        .container { padding: 30px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .btn-qr { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; inline-block: true; }
-    </style>
-</head>
-<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0">Hoş geldiniz, @ViewBag.TeacherName</h5>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-light btn-sm">Çıkış Yap</button>
+                    </form>
+                </div>
+                
+                <div class="card-body text-center p-4">
+                    <p class="text-muted mb-4">Lütfen yoklama başlatılacak ders, derslik ve saat bilgilerini seçiniz.</p>
+                    
+                    <div class="row g-3 text-start mb-4">
+                        <div class="col-md-12">
+                            <label for="courseSelect" class="form-label fw-bold text-secondary">Ders Adı</label>
+                            <select id="courseSelect" class="form-select form-select-lg">
+                                <option value="">-- Dersi Seçiniz --</option>
+                                @if (Model != null)
+                                {
+                                    foreach (var ders in Model)
+                                    {
+                                        <option value="@ders">@ders</option>
+                                    }
+                                }
+                            </select>
+                        </div>
 
-<div class="navbar">
-    <h2>QR Yoklama Sistemi - Hoca Paneli</h2>
-    <!-- Çıkış yapma butonu -->
-    <!-- Güvenlik standartları gereği Logout işlemi POST olarak tetiklenmelidir -->
-<form action="/Account/Logout" method="post" style="display: inline;">
-    <!-- CSRF saldırılarını engellemek için güvenlik tokenını gömüyoruz -->
-    @Html.AntiForgeryToken()
-    
-    <button type="submit" class="btn-logout">
-        <i class="fas fa-sign-out-alt"></i> Çıkış Yap
-    </button>
-</form>
+                        <div class="col-md-6">
+                            <label for="roomSelect" class="form-label fw-bold text-secondary">Derslik / Sınıf</label>
+                            <select id="roomSelect" class="form-select">
+                                <option value="">-- Lab veya Sınıf Seçiniz --</option>
+                                @if (derslikler != null)
+                                {
+                                    foreach (var sınıf in derslikler)
+                                    {
+                                        <option value="@sınıf">@sınıf</option>
+                                    }
+                                }
+                            </select>
+                        </div>
 
-<style>
-    .btn-logout {
-        background-color: #dc3545; /* Kurumsal kırmızı renk */
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background 0.2s;
-    }
-    .btn-logout:hover {
-        background-color: #c82333;
-    }
-</style>
-</div>
+                        <div class="col-md-6">
+                            <label for="timeSelect" class="form-label fw-bold text-secondary">Ders Saati</label>
+                            <select id="timeSelect" class="form-select">
+                                <option value="">-- Saat Aralığı Seçiniz --</option>
+                                @if (dersSaatleri != null)
+                                {
+                                    foreach (var saat in dersSaatleri)
+                                    {
+                                        <option value="@saat">@saat</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
 
-<div class="container">
-    <div class="card">
-        <h3>Hoş Geldiniz, Hocam!</h3>
-        <p>Sisteme başarıyla giriş yaptınız. QR kod tabanlı yoklama sisteminin web yönetim paneli burası olacak.</p>
-        <hr>
-        <p>Bundan sonraki adımda buraya <strong>"QR Kod Oluştur"</strong> butonu ve eski yoklama listelerini görebileceğiniz tablolar ekleyeceğiz.</p>
-        <br>
-        <a href="#" class="btn-qr">Yeni QR Kod Üret (Yakında)</a>
+                    <button id="btnGenerate" class="btn btn-success btn-lg w-100 py-2 shadow-sm fw-bold">
+                        <i class="bi bi-qr-code"></i> Yoklama İçin QR Kod Oluştur
+                    </button>
+
+                    <div id="qrArea" class="mt-4 d-none">
+                        <hr class="my-4">
+                        <div class="alert alert-info py-2" role="alert">
+                            <h5 class="alert-heading mb-1" id="qrTitle"></h5>
+                            <p class="mb-0 small" id="qrSubTitle"></p>
+                        </div>
+                        <div class="d-flex justify-content-center my-3">
+                            <div id="qrcode" class="p-3 bg-white border rounded shadow-sm"></div>
+                        </div>
+                        <p class="text-danger small fw-bold">* Öğrenciler bu QR kodu sistem üzerinden taratarak yoklamaya katılır.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-</body>
-</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.getElementById("btnGenerate");
+        
+        if (btn) {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const selectedCourse = document.getElementById("courseSelect").value;
+                const selectedRoom = document.getElementById("roomSelect").value;
+                const selectedTime = document.getElementById("timeSelect").value;
+
+                if (!selectedCourse || !selectedRoom || !selectedTime) {
+                    alert("Lütfen tüm seçimleri eksiksiz yapın!");
+                    return;
+                }
+
+                const timestamp = new Date().getTime();
+                const qrData = `Ders:${selectedCourse}|Derslik:${selectedRoom}|Saat:${selectedTime}|Zaman:${timestamp}`;
+
+                const qrArea = document.getElementById("qrArea");
+                const qrcodeDiv = document.getElementById("qrcode");
+
+                if (qrArea && qrcodeDiv) {
+                    qrArea.classList.remove("d-none");
+                    document.getElementById("qrTitle").innerText = `${selectedCourse} - Yoklama Başlatıldı`;
+                    document.getElementById("qrSubTitle").innerText = `Konum: ${selectedRoom} | Zaman Dilimi: ${selectedTime}`;
+
+                    // İçini temizle
+                    qrcodeDiv.innerHTML = "";
+
+                    // Eğer kütüphane Layout üzerinden başarıyla yüklendiyse çalışacak
+                    if (typeof QRCode !== "undefined") {
+                        new QRCode(qrcodeDiv, {
+                            text: qrData,
+                            width: 200,
+                            height: 200,
+                            colorDark : "#000000",
+                            colorLight : "#ffffff",
+                            correctLevel : QRCode.CorrectLevel.M
+                        });
+                    } else {
+                        alert("qrcode.min.js dosyası wwwroot/js altında bulunamadı veya yüklenemedi!");
+                    }
+                }
+            });
+        }
+    });
+</script>

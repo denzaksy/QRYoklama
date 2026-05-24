@@ -218,3 +218,4 @@ C:\Users\filiz\Documents\GitHub\QRYoklama\qryoklama\obj\Debug\net9.0\refint\QRYo
 C:\Users\filiz\Documents\GitHub\QRYoklama\qryoklama\obj\Debug\net9.0\QRYoklama.pdb
 C:\Users\filiz\Documents\GitHub\QRYoklama\qryoklama\obj\Debug\net9.0\QRYoklama.genruntimeconfig.cache
 C:\Users\filiz\Documents\GitHub\QRYoklama\qryoklama\obj\Debug\net9.0\ref\QRYoklama.dll
+C:\Users\filiz\Documents\GitHub\QRYoklama\QrYoklama\obj\Debug\net9.0\QRYoklama.sourcelink.json
