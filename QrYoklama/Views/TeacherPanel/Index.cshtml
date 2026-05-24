@@ -88,8 +88,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="~/js/qrcode.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -119,10 +118,10 @@
                     document.getElementById("qrTitle").innerText = `${selectedCourse} - Yoklama Başlatıldı`;
                     document.getElementById("qrSubTitle").innerText = `Konum: ${selectedRoom} | Zaman Dilimi: ${selectedTime}`;
 
-                    // İçini temizle
+                    // Eski kareyi temizle
                     qrcodeDiv.innerHTML = "";
 
-                    // Eğer kütüphane Layout üzerinden başarıyla yüklendiyse çalışacak
+                    // Kütüphane kontrolü ve çizim
                     if (typeof QRCode !== "undefined") {
                         new QRCode(qrcodeDiv, {
                             text: qrData,
@@ -133,7 +132,7 @@
                             correctLevel : QRCode.CorrectLevel.M
                         });
                     } else {
-                        alert("qrcode.min.js dosyası wwwroot/js altında bulunamadı veya yüklenemedi!");
+                        alert("HATA: qrcode.min.js dosyası yüklenemedi! wwwroot/js/qrcode.min.js konumunu ve Program.cs içindeki app.UseStaticFiles() satırını kontrol edin.");
                     }
                 }
             });
