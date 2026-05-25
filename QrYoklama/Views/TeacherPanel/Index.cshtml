@@ -87,8 +87,7 @@
         </div>
     </div>
 </div>
-
-<script src="~/js/qrcode.min.js"></script>
+<script src="./node_modules/qrcode/build/qrcode.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -96,44 +95,50 @@
         
         if (btn) {
             btn.addEventListener("click", function (e) {
-                e.preventDefault();
+                e.preventDefault(); // Sayfa yenilenmesini engelle
 
                 const selectedCourse = document.getElementById("courseSelect").value;
                 const selectedRoom = document.getElementById("roomSelect").value;
                 const selectedTime = document.getElementById("timeSelect").value;
 
+                // Seçim kontrolü
                 if (!selectedCourse || !selectedRoom || !selectedTime) {
-                    alert("Lütfen tüm seçimleri eksiksiz yapın!");
+                    alert("Lütfen tüm seçimleri (Ders, Derslik ve Saat) eksiksiz yapın!");
                     return;
                 }
 
+                // QR Kod veri formatı
                 const timestamp = new Date().getTime();
                 const qrData = `Ders:${selectedCourse}|Derslik:${selectedRoom}|Saat:${selectedTime}|Zaman:${timestamp}`;
 
                 const qrArea = document.getElementById("qrArea");
-                const qrcodeDiv = document.getElementById("qrcode");
-
-                if (qrArea && qrcodeDiv) {
+                
+                if (qrArea) {
                     qrArea.classList.remove("d-none");
                     document.getElementById("qrTitle").innerText = `${selectedCourse} - Yoklama Başlatıldı`;
                     document.getElementById("qrSubTitle").innerText = `Konum: ${selectedRoom} | Zaman Dilimi: ${selectedTime}`;
 
-                    // Eski kareyi temizle
-                    qrcodeDiv.innerHTML = "";
+                    // Bu paket QR kodu doğrudan bir <canvas> elementine veya var olan div'e çizmek için 'QRCode.toCanvas' metodunu kullanır.
+                    // Kodun en kararlı çalışan çizim motorudur:
+                    const canvasContainer = document.getElementById("qrcode");
+                    
+                    // İçinde eski kalan elementleri temizle, yerine canvas oluştur
+                    canvasContainer.innerHTML = '<canvas id="qrCanvas"></canvas>';
+                    const canvas = document.getElementById("qrCanvas");
 
-                    // Kütüphane kontrolü ve çizim
-                    if (typeof QRCode !== "undefined") {
-                        new QRCode(qrcodeDiv, {
-                            text: qrData,
-                            width: 200,
-                            height: 200,
-                            colorDark : "#000000",
-                            colorLight : "#ffffff",
-                            correctLevel : QRCode.CorrectLevel.M
-                        });
-                    } else {
-                        alert("HATA: qrcode.min.js dosyası yüklenemedi! wwwroot/js/qrcode.min.js konumunu ve Program.cs içindeki app.UseStaticFiles() satırını kontrol edin.");
-                    }
+                    QRCode.toCanvas(canvas, qrData, {
+                        width: 220,
+                        margin: 2,
+                        color: {
+                            dark: "#2c3e50",  // QR Kodun ana rengi
+                            light: "#ffffff"  // Arka plan rengi
+                        }
+                    }, function (error) {
+                        if (error) {
+                            console.error("QR oluşturma hatası: ", error);
+                            alert("QR kod çizilirken bir hata meydana geldi.");
+                        }
+                    });
                 }
             });
         }

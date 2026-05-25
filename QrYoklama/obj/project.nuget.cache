@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0B5/wksXJ6U=",
+  "dgSpecHash": "sOkg3mBP++I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
+  "projectFilePath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\filiz\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\filiz\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
