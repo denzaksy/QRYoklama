@@ -1,0 +1,8 @@
+POST http://localhost:5176/api/AttendanceApi/scan
+Content-Type: application/json
+
+{
+  "lessonId": 1,
+  "studentNumber": "221004001",
+  "deviceInfo": "VS Code Test Cihazi"
+}

@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Hoca Yoklama Paneli";
-    // Controller'dan ViewBag ile gelen listeleri C# listesine geri çeviriyoruz
     var derslikler = ViewBag.Derslikler as List<string>;
     var dersSaatleri = ViewBag.DersSaatleri as List<string>;
 }
@@ -80,36 +79,65 @@
                             <div id="qrcode" class="p-3 bg-white border rounded shadow-sm"></div>
                         </div>
                         <p class="text-danger small fw-bold">* Öğrenciler bu QR kodu sistem üzerinden taratarak yoklamaya katılır.</p>
-                    </div>
+                        
+                        <div class="mt-5 text-start">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold text-secondary m-0"><i class="bi bi-people-fill text-primary"></i> Dersteki Öğrenciler</h5>
+                                <span class="badge bg-primary fs-6" id="attendanceCount">Toplam: 0 Öğrenci</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover border align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Öğrenci No</th>
+                                            <th>Adı Soyadı</th>
+                                            <th>Giriş Saati</th>
+                                            <th>Durum</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceList">
+                                        <tr id="noRecordsRow">
+                                            <td colspan="4" class="text-center text-muted py-4">Henüz QR kod taratan öğrenci olmadı. Yoklama bekleniyor...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="./node_modules/qrcode/build/qrcode.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const btn = document.getElementById("btnGenerate");
-        
+        let studentCount = 0;
+        let signalrConnected = false;
+        let connection = null;
+
         if (btn) {
             btn.addEventListener("click", function (e) {
-                e.preventDefault(); // Sayfa yenilenmesini engelle
+                e.preventDefault(); 
 
                 const selectedCourse = document.getElementById("courseSelect").value;
                 const selectedRoom = document.getElementById("roomSelect").value;
                 const selectedTime = document.getElementById("timeSelect").value;
 
-                // Seçim kontrolü
                 if (!selectedCourse || !selectedRoom || !selectedTime) {
                     alert("Lütfen tüm seçimleri (Ders, Derslik ve Saat) eksiksiz yapın!");
                     return;
                 }
 
-                // QR Kod veri formatı
                 const timestamp = new Date().getTime();
-                const qrData = `Ders:${selectedCourse}|Derslik:${selectedRoom}|Saat:${selectedTime}|Zaman:${timestamp}`;
+                const lessonGroup = selectedCourse;
+                const scanUrl = `${window.location.origin}/Student/Scan?lessonName=${encodeURIComponent(selectedCourse)}&room=${encodeURIComponent(selectedRoom)}&time=${encodeURIComponent(selectedTime)}&token=${timestamp}`;
+                const qrData = scanUrl;
 
                 const qrArea = document.getElementById("qrArea");
                 
@@ -118,27 +146,72 @@
                     document.getElementById("qrTitle").innerText = `${selectedCourse} - Yoklama Başlatıldı`;
                     document.getElementById("qrSubTitle").innerText = `Konum: ${selectedRoom} | Zaman Dilimi: ${selectedTime}`;
 
-                    // Bu paket QR kodu doğrudan bir <canvas> elementine veya var olan div'e çizmek için 'QRCode.toCanvas' metodunu kullanır.
-                    // Kodun en kararlı çalışan çizim motorudur:
+                    // Sunucudan gerçek PNG QR oluşturma
                     const canvasContainer = document.getElementById("qrcode");
-                    
-                    // İçinde eski kalan elementleri temizle, yerine canvas oluştur
-                    canvasContainer.innerHTML = '<canvas id="qrCanvas"></canvas>';
-                    const canvas = document.getElementById("qrCanvas");
+                    canvasContainer.innerHTML = ''; 
 
-                    QRCode.toCanvas(canvas, qrData, {
-                        width: 220,
-                        margin: 2,
-                        color: {
-                            dark: "#2c3e50",  // QR Kodun ana rengi
-                            light: "#ffffff"  // Arka plan rengi
-                        }
-                    }, function (error) {
-                        if (error) {
-                            console.error("QR oluşturma hatası: ", error);
-                            alert("QR kod çizilirken bir hata meydana geldi.");
-                        }
+                    fetch('/api/qr/generate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ payload: qrData })
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error('QR oluşturulamadı');
+                        return res.blob();
+                    })
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        canvasContainer.innerHTML = `<img src="${url}" width="220" height="220" alt="QR Kod"/>`;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Sunucudan QR oluşturulamadı. Konsolu kontrol edin.');
                     });
+
+                    // SignalR Bağlantısı
+                    if (!signalrConnected) {
+                        connection = new signalR.HubConnectionBuilder()
+                            .withUrl("/attendanceHub")
+                            .withAutomaticReconnect()
+                            .build();
+
+                        connection.on("ReceiveAttendance", function (studentNo, studentName, scanTime) {
+                            const noRecordsRow = document.getElementById("noRecordsRow");
+                            if (noRecordsRow) noRecordsRow.remove();
+
+                            const list = document.getElementById("attendanceList");
+                            
+                            if (!document.getElementById(`student-${studentNo}`)) {
+                                studentCount++;
+                                document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
+
+                                const row = document.createElement("tr");
+                                row.id = `student-${studentNo}`;
+                                row.className = "table-success";
+                                
+                                row.innerHTML = `
+                                    <td class="fw-bold">${studentNo}</td>
+                                    <td>${studentName}</td>
+                                    <td>${scanTime}</td>
+                                    <td><span class="badge bg-success">Geldi</span></td>
+                                `;
+                                
+                                list.insertBefore(row, list.firstChild);
+
+                                setTimeout(() => { row.className = ""; }, 3000);
+                            }
+                        });
+
+                        connection.start()
+                            .then(() => {
+                                console.log("SignalR Bağlantısı Başarılı!");
+                                return connection.invoke("JoinLessonRoom", lessonGroup);
+                            })
+                            .then(() => {
+                                signalrConnected = true;
+                            })
+                            .catch(err => console.error("SignalR Bağlantı Hatası: ", err));
+                    }
                 }
             });
         }

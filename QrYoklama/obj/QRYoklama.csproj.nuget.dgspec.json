@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {}
+    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj": {}
   },
   "projects": {
-    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {
+    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
+        "projectUniqueName": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
         "projectName": "QRYoklama",
-        "projectPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
-        "packagesPath": "C:\\Users\\filiz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\obj\\",
+        "projectPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
+        "packagesPath": "C:\\Users\\Computer\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\filiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Computer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 24.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +28,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "C:\\Program Files\\DevExpress 24.2\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -57,9 +59,17 @@
               "target": "Package",
               "version": "[9.*, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.*, )"
+            },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[9.*, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.8.0, )"
             }
           },
           "imports": [
@@ -81,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

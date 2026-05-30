@@ -1,0 +1,104 @@
+@model QrYoklama.Models.ViewModels.TeacherAttendanceViewModel
+
+@{
+    ViewData["Title"] = "Canlı Yoklama Paneli";
+}
+
+<div class="container mt-4">
+    <div class="card bg-dark text-white mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="card-title mb-1">@Model.LessonName</h2>
+                <p class="card-text text-muted mb-0">Sınıf: <strong>@Model.ClassName</strong> | Tarih: @DateTime.Today.ToString("dd.MM.yyyy")</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-success fs-5 px-3 py-2" id="attendanceCounter">
+                    Toplam: @Model.AttendedStudents.Count Öğrenci
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white font-weight-bold">Yoklama QR Kodu</div>
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <img src="data:image/png;base64,@Model.QrCodeBase64" class="img-fluid mb-3" style="max-width: 250px;" alt="Yoklama QR" />
+                    <p class="text-muted small">Mobil uygulamadan bu kodu taratın.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <span>Sınıfa Giriş Yapanlar</span>
+                    <span class="spinner-grow spinner-grow-sm text-light" role="status"></span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th>Öğrenci No</th>
+                                    <th>Adı Soyadı</th>
+                                    <th>Giriş Saati</th>
+                                    <th>Durum</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                @if (Model.AttendedStudents.Count == 0)
+                                {
+                                    <tr id="noDataRow"><td colspan="4" class="text-center py-4 text-muted">Henüz kod okutan öğrenci olmadı.</td></tr>
+                                }
+                                else
+                                {
+                                    foreach (var student in Model.AttendedStudents)
+                                    {
+                                        <tr>
+                                            <td><strong>@student.StudentNumber</strong></td>
+                                            <td>@student.StudentName</td>
+                                            <td>@student.ScanTime</td>
+                                            <td><span class="badge bg-success">Derste</span></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder().withUrl("/attendanceHub").build();
+    const lessonId = "@Model.LessonId";
+
+    connection.start().then(function () {
+        connection.invoke("JoinLessonRoom", lessonId);
+    }).catch(err => console.error("SignalR Baglanti hatasi: ", err));
+
+    connection.on("ReceiveNewStudent", function (student) {
+        console.log("Anlık veri geldi:", student);
+        const noDataRow = document.getElementById("noDataRow");
+        if (noDataRow) noDataRow.remove();
+
+        const tableBody = document.getElementById("attendanceTableBody");
+        const newRow = document.createElement("tr");
+
+        newRow.innerHTML = `
+            <td><strong>${student.studentNumber}</strong></td>
+            <td>${student.studentName}</td>
+            <td>${student.scanTime}</td>
+            <td><span class="badge bg-success">Derste</span></td>
+        `;
+        tableBody.prepend(newRow);
+
+        const counterBadge = document.getElementById("attendanceCounter");
+        counterBadge.innerText = `Toplam: ${tableBody.getElementsByTagName("tr").length} Öğrenci`;
+    });
+</script>
