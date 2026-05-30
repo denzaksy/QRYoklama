@@ -1,4 +1,4 @@
-﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace QrYoklama.Models
 {
@@ -13,7 +13,6 @@ namespace QrYoklama.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Code { get; set; } = string.Empty;
         public string ClassName { get; set; } = string.Empty;
     }
 
@@ -21,11 +20,13 @@ namespace QrYoklama.Models
     {
         public int Id { get; set; }
         public int LessonId { get; set; }
-        public Lesson Lesson { get; set; } = null!;
         public int StudentId { get; set; }
-        public Student Student { get; set; } = null!;
-        public DateTime Date { get; set; }
         public DateTime ScanTime { get; set; }
+        public DateTime Date { get; set; }
         public string DeviceInfo { get; set; } = string.Empty;
+
+        // Navigation Properties
+        public Student Student { get; set; } = null!;
+        public Lesson Lesson { get; set; } = null!;
     }
 }
