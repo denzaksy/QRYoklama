@@ -1,4 +1,3 @@
-
 using QrYoklama.Hubs;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR(); // SignalR servisini ekledik
-// QrYoklamaDb context'ini ve Azure SQL ayarlarını sisteme tanıtıyoruz
-// Doğrudan appsettings içindeki bölümü açıkça hedef alıyoruz
+
+// Azure SQL bağlantı dizesini appsettings.json içerisinden çekiyoruz
 var azureConnectionString = builder.Configuration["ConnectionStrings:AzureSqlConnection"];
 
 builder.Services.AddDbContext<QrYoklama.Data.QrYoklamaDb>(options =>
@@ -35,7 +34,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-app.MapHub<AttendanceHub>("/attendanceHub"); // Hub rotasını bağladık
+// HATA 1 ÇÖZÜLDÜ: Hub rotasını tek bir yerde, temiz bir şekilde bağladık
+app.MapHub<AttendanceHub>("/attendanceHub"); 
 
 using (var scope = app.Services.CreateScope())
 {
@@ -43,7 +43,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<QrYoklama.Data.QrYoklamaDb>();
     var appContext = services.GetRequiredService<QrYoklama.Data.ApplicationDbContext>();
     
-    // Veri tabanlarının oluşturulduğundan emin ol
+    // Veri tabanlarının ve tabloların kontrolü
     context.Database.EnsureCreated();
     appContext.Database.EnsureCreated();
 
@@ -52,6 +52,7 @@ using (var scope = app.Services.CreateScope())
     {
         context.Lessons.Add(new QrYoklama.Models.Lesson { Name = "Nesne Yönelimli Programlama", ClassName = "BM-301" });
         context.Lessons.Add(new QrYoklama.Models.Lesson { Name = "Web Tabanlı Teknolojiler", ClassName = "BM-302" });
+        context.SaveChanges(); // Dersleri hemen kaydediyoruz
     }
 
     // Eğer hiç öğrenci yoksa örnek öğrenci ekle
@@ -59,6 +60,7 @@ using (var scope = app.Services.CreateScope())
     {
         context.Students.Add(new QrYoklama.Models.Student { Number = "221004001", FullName = "Ahmet Yılmaz" });
         context.Students.Add(new QrYoklama.Models.Student { Number = "221004002", FullName = "Mehmet Demir" });
+        context.SaveChanges(); // Öğrencileri hemen kaydediyoruz
     }
 
     // Eğer `Teachers` tablosu mevcut değilse oluştur (varsa atla)
@@ -76,7 +78,7 @@ BEGIN
 END
 ");
 
-    // Eğer hiç öğretmen yoksa örnek öğretmen ekle (ApplicationDbContext üzerinden)
+    // HATA 2 ÇÖZÜLDÜ: Eğer hiç öğretmen yoksa ekle ve kendi context'i üzerinden kaydet
     if (!appContext.Teachers.Any())
     {
         appContext.Teachers.AddRange(
@@ -85,8 +87,7 @@ END
         );
         appContext.SaveChanges();
     }
-
-    context.SaveChanges();
 }
-app.MapHub<QrYoklama.Hubs.AttendanceHub>("/attendanceHub");
+
+// Sondaki fazla app.MapHub satırı silindi.
 app.Run();

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QRYoklama")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb2df0bed3398b9ca8a4a5c9356cfda4aeba93d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a826faa77d92cf0cc6489dc165f3167f4fa5f655")]
 [assembly: System.Reflection.AssemblyProductAttribute("QRYoklama")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QRYoklama")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

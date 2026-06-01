@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {}
+    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj": {}
   },
   "projects": {
-    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {
+    "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
+        "projectUniqueName": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj",
         "projectName": "QRYoklama",
-        "projectPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
+        "projectPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj",
         "packagesPath": "C:\\Users\\filiz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\QRYoklama\\obj\\",
+        "outputPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -244,42 +244,42 @@
                             .withAutomaticReconnect()
                             .build();
 
-                        connection.on("ReceiveAttendance", function (studentNo, studentName, scanTime) {
-                            const noRecordsRow = document.getElementById("noRecordsRow");
-                            if (noRecordsRow) noRecordsRow.remove();
+                        // İNDEX.CSHTML İÇİNDEKİ ESKİ CONNECTION.ON BLOKUNU SİL VE BUNUNLA DEĞİŞTİR:
+connection.on("ReceiveAttendance", function (studentNo, studentName) {
+    const noRecordsRow = document.getElementById("noRecordsRow");
+    if (noRecordsRow) noRecordsRow.remove();
 
-                            const list = document.getElementById("attendanceList");
-                            
-                            if (!document.getElementById(`student-${studentNo}`)) {
-                                studentCount++;
-                                document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
+    const list = document.getElementById("attendanceList");
+    
+    if (!document.getElementById(`student-${studentNo}`)) {
+        studentCount++;
+        document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
 
-                                const row = document.createElement("tr");
-                                row.id = `student-${studentNo}`;
-                                row.className = "table-success";
-                                
-                                row.innerHTML = `
-                                    <td class="fw-bold">${studentNo}</td>
-                                    <td>${studentName}</td>
-                                    <td>${scanTime}</td>
-                                    <td><span class="badge bg-success">Geldi</span></td>
-                                `;
-                                
-                                list.insertBefore(row, list.firstChild);
+        // Giriş saatini doğrudan tarayıcının o anki saatinden yakalıyoruz
+        const jürisaati = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
-                                setTimeout(() => { row.className = ""; }, 3000);
-                            }
-                        });
+        const row = document.createElement("tr");
+        row.id = `student-${studentNo}`;
+        row.className = "table-success";
+        
+        row.innerHTML = `
+            <td class="fw-bold">${studentNo}</td>
+            <td>${studentName}</td>
+            <td>${jürisaati}</td> <td><span class="badge bg-success">Geldi</span></td>
+        `;
+        
+        list.insertBefore(row, list.firstChild);
+
+        setTimeout(() => { row.className = ""; }, 3000);
+    }
+});
 
                         connection.start()
-                            .then(() => {
-                                console.log("SignalR Bağlantısı Başarılı!");
-                                return connection.invoke("JoinLessonRoom", lessonGroup);
-                            })
-                            .then(() => {
-                                signalrConnected = true;
-                            })
-                            .catch(err => console.error("SignalR Bağlantı Hatası: ", err));
+                        .then(() => {
+                        console.log("SignalR Bağlantısı Başarılı!");
+                        signalrConnected = true; 
+                         })
+                         .catch(err => console.error("SignalR Bağlantı Hatası: ", err));
                     }
                 }
             });
