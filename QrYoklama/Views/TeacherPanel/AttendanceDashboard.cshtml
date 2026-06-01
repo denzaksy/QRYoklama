@@ -4,15 +4,30 @@
     ViewData["Title"] = "Canlı Yoklama Paneli";
 }
 
+<style>
+    .bg-custom-green { background-color: #005d1c !important; }
+    .text-custom-green { color: #005d1c !important; }
+    .main-panel-card {
+        background-color: #FFFFFF;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+        overflow: hidden;
+    }
+    .custom-table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+</style>
+
 <div class="container mt-4">
-    <div class="card bg-dark text-white mb-4">
-        <div class="card-body d-flex justify-content-between align-items-center">
+    <div class="card bg-dark text-white mb-4 main-panel-card border-0">
+        <div class="card-body d-flex justify-content-between align-items-center p-4">
             <div>
-                <h2 class="card-title mb-1">@Model.LessonName</h2>
-                <p class="card-text text-muted mb-0">Sınıf: <strong>@Model.ClassName</strong> | Tarih: @DateTime.Today.ToString("dd.MM.yyyy")</p>
+                <h2 class="card-title mb-1 fw-bold">@Model.LessonName</h2>
+                <p class="card-text text-light opacity-75 mb-0">Oturum: <strong>Aktif</strong> | Tarih: @DateTime.Today.ToString("dd.MM.yyyy")</p>
             </div>
             <div class="text-end">
-                <span class="badge bg-success fs-5 px-3 py-2" id="attendanceCounter">
+                <span class="badge bg-custom-green fs-5 px-4 py-2 shadow-sm" id="attendanceCounter">
                     Toplam: @Model.AttendedStudents.Count Öğrenci
                 </span>
             </div>
@@ -21,26 +36,28 @@
 
     <div class="row">
         <div class="col-md-4 text-center mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-primary text-white font-weight-bold">Yoklama QR Kodu</div>
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                    <img src="data:image/png;base64,@Model.QrCodeBase64" class="img-fluid mb-3" style="max-width: 250px;" alt="Yoklama QR" />
-                    <p class="text-muted small">Mobil uygulamadan bu kodu taratın.</p>
+            <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header bg-custom-green text-white fw-bold py-3">Yoklama QR Kodu</div>
+                <div class="card-body d-flex flex-column justify-content-center align-items-center bg-white">
+                    
+                    <img src="data:image/png;base64,@(string.IsNullOrEmpty(ViewBag.QrCodeBase64 as string) ? "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" : ViewBag.QrCodeBase64)" class="img-fluid mb-3 p-2 border rounded shadow-sm" style="max-width: 250px;" alt="Yoklama QR" />
+                    
+                    <p class="text-muted small mb-0">Mobil uygulamadan bu kodu taratın.</p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-8 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <span>Sınıfa Giriş Yapanlar</span>
+            <div class="card shadow-sm h-100 border-0" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center py-3">
+                    <span class="fw-bold">Sınıfa Giriş Yapanlar</span>
                     <span class="spinner-grow spinner-grow-sm text-light" role="status"></span>
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-0 bg-white">
                     <div class="table-responsive" style="max-height: 400px;">
-                        <table class="table table-hover table-striped mb-0">
+                        <table class="table table-hover table-striped align-middle mb-0 custom-table">
                             <thead class="table-light sticky-top">
-                                <tr>
+                                <tr class="text-secondary small uppercase fw-bold">
                                     <th>Öğrenci No</th>
                                     <th>Adı Soyadı</th>
                                     <th>Giriş Saati</th>
@@ -50,17 +67,17 @@
                             <tbody id="attendanceTableBody">
                                 @if (Model.AttendedStudents.Count == 0)
                                 {
-                                    <tr id="noDataRow"><td colspan="4" class="text-center py-4 text-muted">Henüz kod okutan öğrenci olmadı.</td></tr>
+                                    <tr id="noDataRow"><td colspan="4" class="text-center py-4 text-muted small">Henüz kod okutan öğrenci olmadı. Listeden canlı takip edebilirsiniz.</td></tr>
                                 }
                                 else
                                 {
                                     foreach (var student in Model.AttendedStudents)
                                     {
                                         <tr>
-                                            <td><strong>@student.StudentNumber</strong></td>
-                                            <td>@student.StudentName</td>
+                                            <td><strong>@student.Number</strong></td>
+                                            <td>@student.FullName</td>
                                             <td>@student.ScanTime</td>
-                                            <td><span class="badge bg-success">Derste</span></td>
+                                            <td><span class="badge bg-success px-2 py-1">Derste</span></td>
                                         </tr>
                                     }
                                 }
@@ -83,22 +100,4 @@
     }).catch(err => console.error("SignalR Baglanti hatasi: ", err));
 
     connection.on("ReceiveNewStudent", function (student) {
-        console.log("Anlık veri geldi:", student);
-        const noDataRow = document.getElementById("noDataRow");
-        if (noDataRow) noDataRow.remove();
-
-        const tableBody = document.getElementById("attendanceTableBody");
-        const newRow = document.createElement("tr");
-
-        newRow.innerHTML = `
-            <td><strong>${student.studentNumber}</strong></td>
-            <td>${student.studentName}</td>
-            <td>${student.scanTime}</td>
-            <td><span class="badge bg-success">Derste</span></td>
-        `;
-        tableBody.prepend(newRow);
-
-        const counterBadge = document.getElementById("attendanceCounter");
-        counterBadge.innerText = `Toplam: ${tableBody.getElementsByTagName("tr").length} Öğrenci`;
-    });
-</script>
+        console.log("Anlık veri geldi:",

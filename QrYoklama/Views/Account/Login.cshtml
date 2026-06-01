@@ -1,35 +1,254 @@
-@{ Layout = null; }
+@{ 
+    Layout = null; 
+}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Hoca Giriş Paneli</title>
-    <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; }
-        .login-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 300px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .error { color: red; margin-bottom: 10px; font-size: 14px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Çukurova Üniversitesi QR Yoklama - Akademisyen Girişi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    @{ 
+    Layout = null; 
+}
+   <style>
+    /* Genel Sayfa Yapısı */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+        background-color: #F8F9FA;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+    }
+
+    /* Giriş Kart Konteyneri */
+    .login-container {
+        background-color: #FFFFFF;
+        width: 100%;
+        max-width: 400px;
+        padding: 45px 35px;
+        border-radius: 16px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Başlık Alanı */
+    .login-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 30px;
+        width: 100%;
+    }
+
+    /* Logo Ölçüleri */
+    .logo-container-img {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-container-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* Üniversite Adı */
+    .login-header h2 {
+        color: #1A202C;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+    }
+
+    /* Sistem Adı (Kurumsal Yeşil Vurgu) */
+    .login-header h3 {
+        color: #005d1c;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    /* Açıklama Yazısı */
+    .login-header p {
+        color: #718096;
+        font-size: 13px;
+        font-weight: 400;
+    }
+
+    /* Form Etiketlerinin Yerleşimi */
+    form {
+        width: 100%;
+    }
+
+    /* Form Grupları */
+    .form-group {
+        margin-bottom: 20px;
+        width: 100%;
+        display: block; /* Flexbox'tan çıkarıp blok düzenine aldık, böylece taşma yapmaz */
+    }
+
+    /* Kullanıcı Adı ve Şifre Başlıkları */
+    .form-group label {
+        color: #4A5568;
+        font-size: 13px;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 8px;
+        text-align: left; /* Yazıyı sola yaslar */
+    }
+
+    /* Giriş Kutuları (İnputlar) - Sıkışmayı ve Taşmayı Çözen Kısım */
+    .form-group input {
+        width: 100%;
+        padding: 12px 16px; /* İçerideki yazının kenarlardan şıkça boşluk bırakmasını sağlar */
+        border: 1px solid #CBD5E0;
+        border-radius: 8px;
+        font-size: 15px;
+        color: #2D3748;
+        background-color: #F8FAFC;
+        display: block;
+        box-sizing: border-box; /* Padding değerinin kutuyu dışarı taşırmasını engeller */
+        transition: all 0.2s ease;
+    }
+
+    /* İnput Odaklanma Efekti */
+    .form-group input:focus {
+        outline: none;
+        border-color: #005d1c;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 0 3px rgba(0, 93, 28, 0.1);
+    }
+
+    /* Beni Hatırla / Seçenek Alanı */
+    .form-options {
+        margin-bottom: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .remember-me {
+        color: #718096;
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        user-select: none;
+    }
+
+    .remember-me input {
+        accent-color: #005d1c;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+    /* Modern Giriş Butonu */
+    button {
+        width: 100%;
+        padding: 14px;
+        background: #005d1c;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0, 93, 28, 0.15);
+    }
+
+    button:hover {
+        background: #004414;
+        transform: translateY(-1px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    /* Hata Mesajı Alanı */
+    .error {
+        background-color: #FFF5F5;
+        color: #C53030;
+        border: 1px solid #FED7D7;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 13.5px;
+        font-weight: 500;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Alt Bilgi */
+    .login-footer {
+        text-align: center;
+        margin-top: 35px;
+        border-top: 1px solid #EDF2F7;
+        padding-top: 20px;
+        color: #A0AEC0;
+        font-size: 11px;
+        width: 100%;
+    }
+</style>
 </head>
 <body>
+
 <div class="login-container">
-    <h2>Hoca Girişi</h2>
-    @if (ViewBag.Error != null) { <div class="error">@ViewBag.Error</div> }
-    <form action="/Account/Login" method="post">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label>Kullanıcı Adı</label>
-            <input type="text" name="username" required />
+    <div class="login-header">
+        <div class="logo-container-img">
+            <img src="~/images/çülogo.png" alt="Çukurova Üniversitesi Logo" />
         </div>
+    @if (ViewBag.Error != null) 
+    { 
+        <div class="error">⚠️ @ViewBag.Error</div> 
+    }
+    
+    <form action="/Account/Login" method="post">
+        @Html.AntiForgeryToken()
+        
+        <div class="form-group">
+            <label>Kullanıcı Adı</label>
+            <input type="text" name="username" placeholder="Kullanıcı adınızı girin" required autocomplete="off" />
+        </div>
+        
         <div class="form-group">
             <label>Şifre</label>
-            <input type="password" name="password" required />
+            <input type="password" name="password" placeholder="•••••" required />
         </div>
-        <button type="submit">Giriş Yap</button>
+
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox" name="rememberMe" value="true"> Oturumu açık tut
+            </label>
+        </div>
+        
+        <button type="submit">Yönetim Paneline Giriş Yap</button>
     </form>
+
+    <div class="login-footer">
+        <p>© 2026 Çukurova Üniversitesi. Akademik Yönetim Sistemi.</p>
+    </div>
 </div>
+
 </body>
 </html>
