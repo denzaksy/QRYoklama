@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace QrYoklama.Hubs // Klasör ve ad alanını buraya kesin olarak dikiyoruz
+namespace QrYoklama.Hubs
 {
     public class AttendanceHub : Hub
     {
