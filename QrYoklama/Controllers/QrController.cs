@@ -66,7 +66,7 @@ namespace QrYoklama.Controllers
                 var scanUrl = BuildScanUrl(schedule.Course, schedule.Room, schedule.Time, cacheKey);
                 var png = GenerateQrPng(scanUrl);
                 return Convert.ToBase64String(png);
-            });
+            })!;
         }
 
         private static string GetCacheKey(PresetScheduleItem schedule)

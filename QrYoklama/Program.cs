@@ -48,11 +48,19 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     appContext.Database.EnsureCreated();
 
-    // Eğer hiç ders yoksa örnek ders ekle
+    // Eğer hiç ders yoksa tüm dersleri ekle
     if (!context.Lessons.Any())
     {
-        context.Lessons.Add(new QrYoklama.Models.Lesson { Name = "Nesne Yönelimli Programlama", ClassName = "BM-301" });
-        context.Lessons.Add(new QrYoklama.Models.Lesson { Name = "Web Tabanlı Teknolojiler", ClassName = "BM-302" });
+        context.Lessons.AddRange(
+            new QrYoklama.Models.Lesson { Name = "İnternet Programcılığı", ClassName = "Lab 1" },
+            new QrYoklama.Models.Lesson { Name = "Görsel Programlama", ClassName = "Lab 2" },
+            new QrYoklama.Models.Lesson { Name = "Yapay Zeka", ClassName = "Lab 3" },
+            new QrYoklama.Models.Lesson { Name = "Sunucu İşletim Sistemi", ClassName = "Lab 4" },
+            new QrYoklama.Models.Lesson { Name = "Mesleki İngilizce", ClassName = "Lab 5" },
+            new QrYoklama.Models.Lesson { Name = "Gömülü Sistemler", ClassName = "Lab 6" },
+            new QrYoklama.Models.Lesson { Name = "İçerik Yönetim Sistemi", ClassName = "Lab 1" },
+            new QrYoklama.Models.Lesson { Name = "Blokzinciri", ClassName = "Lab 2" }
+        );
         context.SaveChanges(); // Dersleri hemen kaydediyoruz
     }
 

@@ -234,7 +234,6 @@ C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\appsettings.De
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\appsettings.json
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.staticwebassets.runtime.json
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.staticwebassets.endpoints.json
-C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.exe
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.deps.json
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.runtimeconfig.json
 C:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\Debug\net9.0\QRYoklama.dll
@@ -647,3 +646,4 @@ c:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\TempBuild\runtimes\win\lib\
 c:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\TempBuild\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 c:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\TempBuild\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 c:\Users\Computer\Desktop\qr\QRYoklama\QrYoklama\bin\TempBuild\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\Computer\Desktop\qr\QRYoklama\QRYoklama\bin\Debug\net9.0\QRYoklama.exe

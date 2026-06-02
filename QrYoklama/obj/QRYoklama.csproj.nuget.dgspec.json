@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj": {}
+    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj": {
+    "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
+        "projectUniqueName": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
         "projectName": "QRYoklama",
-        "projectPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
+        "projectPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
         "packagesPath": "C:\\Users\\Computer\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\obj\\",
+        "outputPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",

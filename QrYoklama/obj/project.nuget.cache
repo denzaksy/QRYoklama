@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sWFR3BPzTJw=",
+  "dgSpecHash": "ET0lEw10/FQ=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QrYoklama\\QRYoklama.csproj",
+  "projectFilePath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Computer\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Computer\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
