@@ -1,9 +1,9 @@
-@model List<string>
+@model QrYoklama.Models.ViewModels.TeacherPanelIndexViewModel
 
 @{
     ViewData["Title"] = "Hoca Yoklama Paneli";
-    var derslikler = ViewBag.Derslikler as List<string>;
-    var dersSaatleri = ViewBag.DersSaatleri as List<string>;
+    var derslikler = Model.Rooms;
+    var dersSaatleri = Model.TimeSlots;
 }
 
 <div class="container mt-5">
@@ -28,7 +28,7 @@
                                 <option value="">-- Dersi Seçiniz --</option>
                                 @if (Model != null)
                                 {
-                                    foreach (var ders in Model)
+                                    foreach (var ders in Model.Courses)
                                     {
                                         <option value="@ders">@ders</option>
                                     }
@@ -78,7 +78,7 @@
                         <div class="d-flex justify-content-center my-3">
                             <div id="qrcode" class="p-3 bg-white border rounded shadow-sm"></div>
                         </div>
-                        <p class="text-danger small fw-bold">* Öğrenciler bu QR kodu sistem üzerinden taratarak yoklamaya katılır.</p>
+                        
                         
                         <div class="mt-5 text-start">
                             <div class="d-flex justify-content-between align-items-center mb-3">

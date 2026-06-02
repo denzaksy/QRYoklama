@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddMemoryCache();
 builder.Services.AddSignalR(); // SignalR servisini ekledik
 // QrYoklamaDb context'ini ve Azure SQL ayarlarını sisteme tanıtıyoruz
 // Doğrudan appsettings içindeki bölümü açıkça hedef alıyoruz

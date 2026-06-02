@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net9.0": {
       "Azure.Core/1.38.0": {
@@ -5065,11 +5065,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj",
+      "projectUniqueName": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
       "projectName": "QRYoklama",
-      "projectPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\QRYoklama.csproj",
-      "packagesPath": "C:\\Users\\filiz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\filiz\\Documents\\GitHub\\QRYoklama\\qryoklama\\obj\\",
+      "projectPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\QRYoklama.csproj",
+      "packagesPath": "C:\\Users\\Computer\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Computer\\Desktop\\qr\\QRYoklama\\QRYoklama\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 24.2\\Components\\Offline Packages",
@@ -5091,7 +5091,6 @@
       },
       "frameworks": {
         "net9.0": {
-          "framework": "net9.0",
           "targetAlias": "net9.0",
           "projectReferences": {}
         }
@@ -5106,11 +5105,10 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
-        "framework": "net9.0",
         "targetAlias": "net9.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": {
@@ -5151,7 +5149,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

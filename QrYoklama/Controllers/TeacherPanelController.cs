@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Security.Claims;
+using QrYoklama.Models.ViewModels;
+using System.Linq;
 
 namespace QrYoklama.Controllers
 {
@@ -10,37 +10,16 @@ namespace QrYoklama.Controllers
     {
         public IActionResult Index()
         {
-            var teacherName = User.Identity?.Name;
-            ViewBag.TeacherName = teacherName;
+            ViewBag.TeacherName = User.Identity?.Name;
 
-            var dersler = new List<string> 
-            { 
-                "İnternet Programcılığı", 
-                "İçerik Yönetim Sistemi", 
-                "Görsel Programlama", 
-                "Sunucu İşletim Sistemi",
-                "Mesleki İngilizce" 
-            };
-
-            ViewBag.Derslikler = new List<string>
+            var viewModel = new TeacherPanelIndexViewModel
             {
-                "Lab 1",
-                "Lab 2",
-                "Lab 3",
-                "Lab 4",
-                "Lab 5",
-                "Lab 6"
+                Courses = TeacherPanelSchedule.Courses.ToList(),
+                Rooms = TeacherPanelSchedule.Rooms.ToList(),
+                TimeSlots = TeacherPanelSchedule.TimeSlots.ToList()
             };
 
-            ViewBag.DersSaatleri = new List<string>
-            {
-                "08:15 - 10:00",
-                "10:15 - 12:00",
-                "13:15 - 15:00",
-                "15:15 - 17:00"
-            };
-
-            return View(dersler);
+            return View(viewModel);
         }
     }
 }
