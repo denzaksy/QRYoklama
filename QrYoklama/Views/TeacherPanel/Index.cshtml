@@ -6,25 +6,93 @@
     var dersSaatleri = Model.TimeSlots;
 }
 
+<style>
+    .bg-custom-green { background-color: #005d1c !important; }
+    .text-custom-green { color: #005d1c !important; }
+    .border-custom-green { border-color: #005d1c !important; }
+    
+    .main-panel-card {
+        background-color: #FFFFFF;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+        overflow: hidden;
+    }
+    
+    .btn-logout {
+        background-color: rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    .btn-logout:hover {
+        background-color: #FFFFFF;
+        color: #005d1c;
+    }
+    
+    .custom-form-label {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #4A5568;
+        margin-bottom: 4px;
+    }
+    
+    .custom-select {
+        border: 1px solid #CBD5E0;
+        border-radius: 8px !important;
+        background-color: #F8FAFC;
+        color: #2D3748;
+        padding: 10px 14px;
+        font-size: 14.5px;
+        transition: all 0.2s ease;
+    }
+    .custom-select:focus {
+        border-color: #005d1c !important;
+        box-shadow: 0 0 0 3px rgba(0, 93, 28, 0.08) !important;
+        background-color: #FFFFFF;
+    }
+    
+    .btn-generate-qr {
+        background-color: #005d1c !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-size: 16px;
+        transition: all 0.2s ease;
+    }
+    .btn-generate-qr:hover {
+        background-color: #004414 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 93, 28, 0.2) !important;
+    }
+    
+    .custom-alert-info {
+        background-color: #E6F4EA !important;
+        border: 1px solid #CEEAD6 !important;
+        color: #137333 !important;
+        border-radius: 10px;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-                    <h5 class="mb-0">Hoş geldiniz, @ViewBag.TeacherName</h5>
+        <div class="col-md-9 col-lg-8">
+            <div class="card main-panel-card border-0">
+                
+                <div class="card-header bg-custom-green text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-semibold">👨‍🏫 Hoş geldiniz, @ViewBag.TeacherName</h5>
                     <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-outline-light btn-sm">Çıkış Yap</button>
+                        <button type="submit" class="btn btn-logout btn-sm px-3 fw-medium">Çıkış Yap</button>
                     </form>
                 </div>
                 
-                <div class="card-body text-center p-4">
-                    <p class="text-muted mb-4">Lütfen yoklama başlatılacak ders, derslik ve saat bilgilerini seçiniz.</p>
+                <div class="card-body text-center p-4 p-md-5">
+                    <p class="text-muted small mb-4">Lütfen yoklama başlatılacak ders, derslik ve saat bilgilerini seçiniz.</p>
                     
                     <div class="row g-3 text-start mb-4">
                         <div class="col-md-12">
-                            <label for="courseSelect" class="form-label fw-bold text-secondary">Ders Adı</label>
-                            <select id="courseSelect" class="form-select form-select-lg">
+                            <label for="courseSelect" class="form-label custom-form-label">Ders Adı</label>
+                            <select id="courseSelect" class="form-select custom-select form-select-lg">
                                 <option value="">-- Dersi Seçiniz --</option>
                                 @if (Model != null)
                                 {
@@ -37,8 +105,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="roomSelect" class="form-label fw-bold text-secondary">Derslik / Sınıf</label>
-                            <select id="roomSelect" class="form-select">
+                            <label for="roomSelect" class="form-label custom-form-label">Derslik / Sınıf</label>
+                            <select id="roomSelect" class="form-select custom-select">
                                 <option value="">-- Lab veya Sınıf Seçiniz --</option>
                                 @if (derslikler != null)
                                 {
@@ -51,8 +119,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="timeSelect" class="form-label fw-bold text-secondary">Ders Saati</label>
-                            <select id="timeSelect" class="form-select">
+                            <label for="timeSelect" class="form-label custom-form-label">Ders Saati</label>
+                            <select id="timeSelect" class="form-select custom-select">
                                 <option value="">-- Saat Aralığı Seçiniz --</option>
                                 @if (dersSaatleri != null)
                                 {
@@ -65,29 +133,32 @@
                         </div>
                     </div>
 
-                    <button id="btnGenerate" class="btn btn-success btn-lg w-100 py-2 shadow-sm fw-bold">
+                    <button id="btnGenerate" class="btn btn-generate-qr btn-success btn-lg w-100 py-3 shadow-sm fw-bold">
                         <i class="bi bi-qr-code"></i> Yoklama İçin QR Kod Oluştur
                     </button>
 
                     <div id="qrArea" class="mt-4 d-none">
-                        <hr class="my-4">
-                        <div class="alert alert-info py-2" role="alert">
-                            <h5 class="alert-heading mb-1" id="qrTitle"></h5>
-                            <p class="mb-0 small" id="qrSubTitle"></p>
+                        <hr class="my-4" style="border-color: #E2E8F0;">
+                        
+                        <div class="alert custom-alert-info py-3" role="alert">
+                            <h5 class="alert-heading mb-1 fw-bold" id="qrTitle"></h5>
+                            <p class="mb-0 small opacity-90" id="qrSubTitle"></p>
                         </div>
-                        <div class="d-flex justify-content-center my-3">
+                        
+                        <div class="d-flex justify-content-center my-4">
                             <div id="qrcode" class="p-3 bg-white border rounded shadow-sm"></div>
                         </div>
                         
                         
                         <div class="mt-5 text-start">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fw-bold text-secondary m-0"><i class="bi bi-people-fill text-primary"></i> Dersteki Öğrenciler</h5>
-                                <span class="badge bg-primary fs-6" id="attendanceCount">Toplam: 0 Öğrenci</span>
+                                <h5 class="fw-bold text-dark m-0"><i class="bi bi-people-fill text-custom-green"></i> Dersteki Öğrenciler</h5>
+                                <span class="badge bg-custom-green fs-6 px-3 py-2" id="attendanceCount">Toplam: 0 Öğrenci</span>
                             </div>
+                            
                             <div class="table-responsive">
-                                <table class="table table-hover border align-middle">
-                                    <thead class="table-light">
+                                <table class="table table-hover border align-middle bg-white" style="border-radius: 8px; overflow: hidden;">
+                                    <thead class="table-light text-secondary small uppercase fw-bold">
                                         <tr>
                                             <th>Öğrenci No</th>
                                             <th>Adı Soyadı</th>
@@ -97,13 +168,13 @@
                                     </thead>
                                     <tbody id="attendanceList">
                                         <tr id="noRecordsRow">
-                                            <td colspan="4" class="text-center text-muted py-4">Henüz QR kod taratan öğrenci olmadı. Yoklama bekleniyor...</td>
+                                            <td colspan="4" class="text-center text-muted py-4 small">Henüz QR kod taratan öğrenci olmadı. Yoklama bekleniyor...</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -146,7 +217,6 @@
                     document.getElementById("qrTitle").innerText = `${selectedCourse} - Yoklama Başlatıldı`;
                     document.getElementById("qrSubTitle").innerText = `Konum: ${selectedRoom} | Zaman Dilimi: ${selectedTime}`;
 
-                    // Sunucudan gerçek PNG QR oluşturma
                     const canvasContainer = document.getElementById("qrcode");
                     canvasContainer.innerHTML = ''; 
 
@@ -168,49 +238,48 @@
                         alert('Sunucudan QR oluşturulamadı. Konsolu kontrol edin.');
                     });
 
-                    // SignalR Bağlantısı
                     if (!signalrConnected) {
                         connection = new signalR.HubConnectionBuilder()
                             .withUrl("/attendanceHub")
                             .withAutomaticReconnect()
                             .build();
 
-                        connection.on("ReceiveAttendance", function (studentNo, studentName, scanTime) {
-                            const noRecordsRow = document.getElementById("noRecordsRow");
-                            if (noRecordsRow) noRecordsRow.remove();
+                        // İNDEX.CSHTML İÇİNDEKİ ESKİ CONNECTION.ON BLOKUNU SİL VE BUNUNLA DEĞİŞTİR:
+connection.on("ReceiveAttendance", function (studentNo, studentName) {
+    const noRecordsRow = document.getElementById("noRecordsRow");
+    if (noRecordsRow) noRecordsRow.remove();
 
-                            const list = document.getElementById("attendanceList");
-                            
-                            if (!document.getElementById(`student-${studentNo}`)) {
-                                studentCount++;
-                                document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
+    const list = document.getElementById("attendanceList");
+    
+    if (!document.getElementById(`student-${studentNo}`)) {
+        studentCount++;
+        document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
 
-                                const row = document.createElement("tr");
-                                row.id = `student-${studentNo}`;
-                                row.className = "table-success";
-                                
-                                row.innerHTML = `
-                                    <td class="fw-bold">${studentNo}</td>
-                                    <td>${studentName}</td>
-                                    <td>${scanTime}</td>
-                                    <td><span class="badge bg-success">Geldi</span></td>
-                                `;
-                                
-                                list.insertBefore(row, list.firstChild);
+        // Giriş saatini doğrudan tarayıcının o anki saatinden yakalıyoruz
+        const jürisaati = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
-                                setTimeout(() => { row.className = ""; }, 3000);
-                            }
-                        });
+        const row = document.createElement("tr");
+        row.id = `student-${studentNo}`;
+        row.className = "table-success";
+        
+        row.innerHTML = `
+            <td class="fw-bold">${studentNo}</td>
+            <td>${studentName}</td>
+            <td>${jürisaati}</td> <td><span class="badge bg-success">Geldi</span></td>
+        `;
+        
+        list.insertBefore(row, list.firstChild);
+
+        setTimeout(() => { row.className = ""; }, 3000);
+    }
+});
 
                         connection.start()
-                            .then(() => {
-                                console.log("SignalR Bağlantısı Başarılı!");
-                                return connection.invoke("JoinLessonRoom", lessonGroup);
-                            })
-                            .then(() => {
-                                signalrConnected = true;
-                            })
-                            .catch(err => console.error("SignalR Bağlantı Hatası: ", err));
+                        .then(() => {
+                        console.log("SignalR Bağlantısı Başarılı!");
+                        signalrConnected = true; 
+                         })
+                         .catch(err => console.error("SignalR Bağlantı Hatası: ", err));
                     }
                 }
             });

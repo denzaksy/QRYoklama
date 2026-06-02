@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
-namespace QrYoklama.Hubs
+namespace QrYoklama.Hubs // Klasör ve ad alanını buraya kesin olarak dikiyoruz
 {
     public class AttendanceHub : Hub
     {
-        public async Task JoinLessonRoom(string lessonId)
+        public async Task SendAttendance(string studentNumber, string studentName)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, lessonId);
+            await Clients.All.SendAsync("ReceiveAttendance", studentNumber, studentName);
         }
     }
 }
