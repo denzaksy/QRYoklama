@@ -14,14 +14,12 @@ namespace QrYoklama.Data
             {
                 context.Database.EnsureCreated();
 
-                // TEMİZLİK: Eski çakışmaları ve hatalı kayıtları tamamen sıfırlıyoruz
                 if (context.Teachers.Any())
                 {
                     context.Teachers.RemoveRange(context.Teachers);
                     context.SaveChanges();
                 }
 
-                // 1. Hoca
                 context.Teachers.Add(new Teacher
                 {
                     FirstName = "Yılmaz",
@@ -31,7 +29,6 @@ namespace QrYoklama.Data
                     Department = "Bilgisayar Programcılığı"
                 });
 
-                // 2. Hoca
                 context.Teachers.Add(new Teacher
                 {
                     FirstName = "Mehmet",
@@ -41,7 +38,6 @@ namespace QrYoklama.Data
                     Department = "Bilgisayar Programcılığı"
                 });
 
-                // 3. Hoca
                 context.Teachers.Add(new Teacher
                 {
                     FirstName = "Mesut",
@@ -51,7 +47,6 @@ namespace QrYoklama.Data
                     Department = "Bilgisayar Programcılığı"
                 });
 
-                // 4. Hoca
                 context.Teachers.Add(new Teacher
                 {
                     FirstName = "Mehmet İsmail",
@@ -61,7 +56,7 @@ namespace QrYoklama.Data
                     Department = "Bilgisayar Programcılığı"
                 });
 
-                context.SaveChanges(); // Tüm hocaları tertemiz sıfır veritabanına kaydeder
+                context.SaveChanges();
             }
         }
     }

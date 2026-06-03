@@ -244,7 +244,6 @@
                             .withAutomaticReconnect()
                             .build();
 
-                        // İNDEX.CSHTML İÇİNDEKİ ESKİ CONNECTION.ON BLOKUNU SİL VE BUNUNLA DEĞİŞTİR:
 connection.on("ReceiveAttendance", function (studentNo, studentName) {
     const noRecordsRow = document.getElementById("noRecordsRow");
     if (noRecordsRow) noRecordsRow.remove();
@@ -255,7 +254,6 @@ connection.on("ReceiveAttendance", function (studentNo, studentName) {
         studentCount++;
         document.getElementById("attendanceCount").innerText = `Toplam: ${studentCount} Öğrenci`;
 
-        // Giriş saatini doğrudan tarayıcının o anki saatinden yakalıyoruz
         const jürisaati = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
         const row = document.createElement("tr");

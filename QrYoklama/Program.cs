@@ -5,9 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
-builder.Services.AddSignalR(); // SignalR servisini ekledik
+builder.Services.AddSignalR();
 
-// Azure SQL bağlantı dizesini appsettings.json içerisinden çekiyoruz
 var azureConnectionString = builder.Configuration["ConnectionStrings:AzureSqlConnection"];
 
 builder.Services.AddDbContext<QrYoklama.Data.QrYoklamaDb>(options =>
@@ -16,7 +15,6 @@ builder.Services.AddDbContext<QrYoklama.Data.QrYoklamaDb>(options =>
 builder.Services.AddDbContext<QrYoklama.Data.ApplicationDbContext>(options =>
     options.UseSqlServer(azureConnectionString));
 
-// Giriş işlemlerinin (SignInAsync) çalışabilmesi için cookie handler'ı sisteme kaydediyoruz
 builder.Services.AddAuthentication("Cookies")
     .AddCookie("Cookies", options =>
     {
@@ -35,7 +33,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-// HATA 1 ÇÖZÜLDÜ: Hub rotasını tek bir yerde, temiz bir şekilde bağladık
 app.MapHub<AttendanceHub>("/attendanceHub"); 
 
 using (var scope = app.Services.CreateScope())
@@ -44,18 +41,15 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<QrYoklama.Data.QrYoklamaDb>();
     var appContext = services.GetRequiredService<QrYoklama.Data.ApplicationDbContext>();
     
-    // Veri tabanlarının ve tabloların kontrolü
     context.Database.EnsureCreated();
     appContext.Database.EnsureCreated();
     
-    // Drop and recreate Teachers table with correct structure
     try
     {
         appContext.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS [Teachers];");
     }
     catch { }
     
-    // Create Teachers table with correct structure
     appContext.Database.ExecuteSqlRaw(@"
         CREATE TABLE [Teachers] (
             [Id] INT IDENTITY(1,1) PRIMARY KEY,
@@ -67,7 +61,6 @@ using (var scope = app.Services.CreateScope())
         )
     ");
 
-    // Eğer hiç ders yoksa tüm dersleri ekle
     if (!context.Lessons.Any())
     {
         context.Lessons.AddRange(
@@ -80,19 +73,16 @@ using (var scope = app.Services.CreateScope())
             new QrYoklama.Models.Lesson { Name = "İçerik Yönetim Sistemi", ClassName = "Lab 1" },
             new QrYoklama.Models.Lesson { Name = "Blokzinciri", ClassName = "Lab 2" }
         );
-        context.SaveChanges(); // Dersleri hemen kaydediyoruz
+        context.SaveChanges(); 
     }
 
-    // Eğer hiç öğrenci yoksa örnek öğrenci ekle
     if (!context.Students.Any())
     {
         context.Students.Add(new QrYoklama.Models.Student { Number = "221004001", FullName = "Ahmet Yılmaz" });
         context.Students.Add(new QrYoklama.Models.Student { Number = "221004002", FullName = "Mehmet Demir" });
-        context.SaveChanges(); // Öğrencileri hemen kaydediyoruz
+        context.SaveChanges(); //
     }
 
-    // Teachers tablosu EnsureCreated() tarafından otomatik olarak oluşturulacak
-    // Eğer hiç öğretmen yoksa ekle
     if (!appContext.Teachers.Any())
     {
         appContext.Teachers.AddRange(
@@ -105,5 +95,4 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Sondaki fazla app.MapHub satırı silindi.
 app.Run();

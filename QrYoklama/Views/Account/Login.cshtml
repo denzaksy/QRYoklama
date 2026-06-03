@@ -12,7 +12,6 @@
     Layout = null; 
 }
    <style>
-    /* Genel Sayfa Yapısı */
     * {
         margin: 0;
         padding: 0;
@@ -29,7 +28,6 @@
         padding: 20px;
     }
 
-    /* Giriş Kart Konteyneri */
     .login-container {
         background-color: #FFFFFF;
         width: 100%;
@@ -40,7 +38,6 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     }
 
-    /* Başlık Alanı */
     .login-header {
         display: flex;
         flex-direction: column;
@@ -50,7 +47,6 @@
         width: 100%;
     }
 
-    /* Logo Ölçüleri */
     .logo-container-img {
         width: 90px;
         height: 90px;
@@ -66,7 +62,6 @@
         object-fit: contain;
     }
 
-    /* Üniversite Adı */
     .login-header h2 {
         color: #1A202C;
         font-size: 18px;
@@ -75,7 +70,6 @@
         margin-bottom: 2px;
     }
 
-    /* Sistem Adı (Kurumsal Yeşil Vurgu) */
     .login-header h3 {
         color: #005d1c;
         font-size: 16px;
@@ -84,50 +78,44 @@
         margin-bottom: 8px;
     }
 
-    /* Açıklama Yazısı */
     .login-header p {
         color: #718096;
         font-size: 13px;
         font-weight: 400;
     }
 
-    /* Form Etiketlerinin Yerleşimi */
     form {
         width: 100%;
     }
 
-    /* Form Grupları */
     .form-group {
         margin-bottom: 20px;
         width: 100%;
-        display: block; /* Flexbox'tan çıkarıp blok düzenine aldık, böylece taşma yapmaz */
+        display: block;
     }
 
-    /* Kullanıcı Adı ve Şifre Başlıkları */
     .form-group label {
         color: #4A5568;
         font-size: 13px;
         font-weight: 600;
         display: block;
         margin-bottom: 8px;
-        text-align: left; /* Yazıyı sola yaslar */
+        text-align: left;
     }
 
-    /* Giriş Kutuları (İnputlar) - Sıkışmayı ve Taşmayı Çözen Kısım */
     .form-group input {
         width: 100%;
-        padding: 12px 16px; /* İçerideki yazının kenarlardan şıkça boşluk bırakmasını sağlar */
+        padding: 12px 16px;
         border: 1px solid #CBD5E0;
         border-radius: 8px;
         font-size: 15px;
         color: #2D3748;
         background-color: #F8FAFC;
         display: block;
-        box-sizing: border-box; /* Padding değerinin kutuyu dışarı taşırmasını engeller */
+        box-sizing: border-box;
         transition: all 0.2s ease;
     }
 
-    /* İnput Odaklanma Efekti */
     .form-group input:focus {
         outline: none;
         border-color: #005d1c;
@@ -135,7 +123,6 @@
         box-shadow: 0 0 0 3px rgba(0, 93, 28, 0.1);
     }
 
-    /* Beni Hatırla / Seçenek Alanı */
     .form-options {
         margin-bottom: 20px;
         width: 100%;
@@ -160,7 +147,6 @@
         cursor: pointer;
     }
 
-    /* Modern Giriş Butonu */
     button {
         width: 100%;
         padding: 14px;
@@ -184,7 +170,6 @@
         transform: translateY(0);
     }
 
-    /* Hata Mesajı Alanı */
     .error {
         background-color: #FFF5F5;
         color: #C53030;
@@ -199,7 +184,6 @@
         box-sizing: border-box;
     }
 
-    /* Alt Bilgi */
     .login-footer {
         text-align: center;
         margin-top: 35px;

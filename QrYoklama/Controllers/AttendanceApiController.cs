@@ -5,11 +5,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-// BURADAKİ İSİMLERİ TAMAMEN BAĞIMSIZ HALE GETİRDİK
 namespace QrYoklama.Controllers
-{
-    // 1. Öğrencinin istek atacağı Model Yapısı
-    public class QrScanRequestDto
+{    public class QrScanRequestDto
     {
         public int? LessonId { get; set; }
         public string LessonName { get; set; } = string.Empty;
@@ -23,7 +20,6 @@ namespace QrYoklama.Controllers
     [Route("api/[controller]")]
     public class AttendanceApiController : ControllerBase
     {
-        // Projendeki orijinal Data klasöründeki DbContext adını doğrudan hedef alıyoruz
         private readonly QrYoklama.Data.QrYoklamaDb _context;
         private readonly IHubContext<QrYoklama.Hubs.AttendanceHub> _hubContext;
 
@@ -45,7 +41,6 @@ namespace QrYoklama.Controllers
                 return BadRequest(new { message = "Öğrenci numarası boş bırakılamaz." });
             }
 
-            // Öğrenciyi veri tabanında ara
             var student = await _context.Students.FirstOrDefaultAsync(s => s.Number == model.StudentNumber);
             if (student == null)
             {
@@ -78,7 +73,6 @@ namespace QrYoklama.Controllers
                 return BadRequest(new { message = "Ders bilgisi bulunamadı." });
             }
 
-            // Bugün daha önce yoklama alınmış mı kontrol et
             var alreadyAttended = await _context.AttendanceRecords
                 .AnyAsync(a => a.LessonId == lesson.Id && a.StudentId == student.Id && a.Date.Date == DateTime.Today);
 
@@ -87,7 +81,6 @@ namespace QrYoklama.Controllers
                 return BadRequest(new { message = "Bu ders için zaten yoklama verdiniz." });
             }
 
-            // Yeni yoklama kaydı oluştur
             var record = new QrYoklama.Models.AttendanceRecord
             {
                 LessonId = lesson.Id,

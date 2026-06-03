@@ -22,8 +22,6 @@ namespace QrYoklama.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            // Sonsuz döngü riskini sıfırlamak için buradaki otomatik yönlendirmeyi kaldırdık.
-            // Sayfa her zaman temiz bir şekilde giriş ekranını açacak.
             return View();
         }
 
@@ -37,7 +35,6 @@ namespace QrYoklama.Controllers
                 return View();
             }
 
-            // Eğer veritabanı boşsa hocaları butona basıldığı an zorla oluşturur
             if (!_context.Teachers.Any())
             {
                 var varsayilanHocalar = new List<Teacher>
