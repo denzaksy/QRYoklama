@@ -47,6 +47,25 @@ using (var scope = app.Services.CreateScope())
     // Veri tabanlarının ve tabloların kontrolü
     context.Database.EnsureCreated();
     appContext.Database.EnsureCreated();
+    
+    // Drop and recreate Teachers table with correct structure
+    try
+    {
+        appContext.Database.ExecuteSqlRaw("DROP TABLE IF EXISTS [Teachers];");
+    }
+    catch { }
+    
+    // Create Teachers table with correct structure
+    appContext.Database.ExecuteSqlRaw(@"
+        CREATE TABLE [Teachers] (
+            [Id] INT IDENTITY(1,1) PRIMARY KEY,
+            [FirstName] NVARCHAR(MAX) NOT NULL,
+            [LastName] NVARCHAR(MAX) NOT NULL,
+            [Username] NVARCHAR(MAX) NOT NULL,
+            [PasswordHash] NVARCHAR(MAX) NOT NULL,
+            [Department] NVARCHAR(MAX) NULL
+        )
+    ");
 
     // Eğer hiç ders yoksa tüm dersleri ekle
     if (!context.Lessons.Any())
@@ -72,27 +91,15 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges(); // Öğrencileri hemen kaydediyoruz
     }
 
-    // Eğer `Teachers` tablosu mevcut değilse oluştur (varsa atla)
-    appContext.Database.ExecuteSqlRaw(@"
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Teachers]') AND type in (N'U'))
-BEGIN
-    CREATE TABLE [dbo].[Teachers](
-        [Id] INT IDENTITY(1,1) PRIMARY KEY,
-        [FirstName] NVARCHAR(200) NOT NULL,
-        [LastName] NVARCHAR(200) NOT NULL,
-        [Username] NVARCHAR(200) NOT NULL,
-        [PasswordHash] NVARCHAR(400) NOT NULL,
-        [Department] NVARCHAR(200) NULL
-    );
-END
-");
-
-    // HATA 2 ÇÖZÜLDÜ: Eğer hiç öğretmen yoksa ekle ve kendi context'i üzerinden kaydet
+    // Teachers tablosu EnsureCreated() tarafından otomatik olarak oluşturulacak
+    // Eğer hiç öğretmen yoksa ekle
     if (!appContext.Teachers.Any())
     {
         appContext.Teachers.AddRange(
             new QrYoklama.Models.Teacher { FirstName = "Yılmaz", LastName = "Koçak", Username = "ykocak", PasswordHash = "123123", Department = "Bilgisayar Programcılığı" },
-            new QrYoklama.Models.Teacher { FirstName = "Mehmet", LastName = "Esen", Username = "mehesen", PasswordHash = "112233", Department = "Bilgisayar Programcılığı" }
+            new QrYoklama.Models.Teacher { FirstName = "Mehmet", LastName = "Esen", Username = "mehesen", PasswordHash = "112233", Department = "Bilgisayar Programcılığı" },
+            new QrYoklama.Models.Teacher { FirstName = "Mesut", LastName = "Özonur", Username = "ozonur", PasswordHash = "123456", Department = "Bilgisayar Programcılığı" },
+            new QrYoklama.Models.Teacher { FirstName = "Mehmet İsmail", LastName = "Solmaz", Username = "misolmaz", PasswordHash = "123321", Department = "Bilgisayar Programcılığı" }
         );
         appContext.SaveChanges();
     }

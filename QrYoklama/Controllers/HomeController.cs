@@ -17,8 +17,7 @@ public class HomeController : Controller
         _logger = logger;
         _hubContext = hubContext;
     }
-<summary>
-</summary>
+
     [HttpGet("get")]
     public async Task<IActionResult> GetAttendanceFromMobile([FromQuery] string studentNo, [FromQuery] string name)
     {
